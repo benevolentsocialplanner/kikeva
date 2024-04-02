@@ -63,7 +63,7 @@ export const VideoScreen = () => {
         style={styles.titleWrapper}
         onPress={()=> navigation.navigate('VideoDetailScreen', {video: video})}
         > 
-          <Text key={index}>{video.title}</Text>
+          <Text key={index} style={{color: "black"}}>{video.title}</Text>
         </TouchableOpacity>
       ))}
       </View>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: 'black'
   },
   titleWrapper: {
     padding: 10,

@@ -47,7 +47,7 @@ export const LoginScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-        <Text>
+        <Text style={{color: "black"}}>
           LOGO
         </Text>
       </View>
@@ -74,7 +74,8 @@ export const LoginScreen = () => {
         <TouchableOpacity onPress={onPress} style={styles.button} >
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </TouchableOpacity>
-        : <Text>Loading...</Text>}
+        : 
+        <View style={{display: "flex", justifyContent: "center", alignItems: "center"}}><Text stlye={{color: "black", fontSize: 16}}>Loading...</Text></View>}
       </View>
     <Text style={styles.infoText}>
       ENDÜSTRİ ÇALIŞANLARINDA KÜRESEL İKLİM KRİZİ İLE KRONİK HASTALIKLAR İLİŞKİSİ ÜZERİNE BİLGİ VE TUTUMUN DEĞİŞTİRİLMESİNE YÖNELİK EDUTAINMENT VE VİDEO ANALİZ YÖNTEMİ İLE İNTERAKTİF EĞİTİM PROGRAMI VE MOBİL UYGULAMA GELİŞTİRİLMESİ PROJESİ 
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
-    marginTop: 20,
+    marginTop: 50,
     display: 'flex',
     alignSelf: 'center',
     alignItems: 'center',
@@ -129,5 +130,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'lightgray',
     padding: 10,
+    color: 'black'
   },
 });
