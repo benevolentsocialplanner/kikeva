@@ -5,6 +5,7 @@ import {VideoScreen} from './screens/VideoScreen';
 import {VideoDetailScreen} from './screens/VideoDetailScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import { AdminScreen } from './screens/AdminScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,7 +35,7 @@ function App() {
     loadUser();
   }, [user]);
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     const loadTokenType = async () => {
       try {
         const tokenType = await Storage.getItem("tokenType");
@@ -56,6 +57,7 @@ function App() {
             <Stack.Navigator>
               <Stack.Screen name="VideoScreen" component={VideoScreen} />
               <Stack.Screen name="VideoDetailScreen" component={VideoDetailScreen} />
+              <Stack.Screen name="AdminScreen" component={AdminScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </>

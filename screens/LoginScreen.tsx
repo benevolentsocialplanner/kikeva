@@ -45,10 +45,13 @@ export const LoginScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Text style={{color: "black"}}>
-          LOGO
+        <Text style={{color: "black", fontWeight: '700', fontSize: 26}}>
+          KIKEVA
+        </Text>
+        <Text style={{color: "black", fontWeight: '400', fontSize: 14, marginTop: 12}}>
+          Hoşgeldiniz
         </Text>
       </View>
       <View style={styles.formContainer}>
@@ -71,16 +74,25 @@ export const LoginScreen = () => {
         />
         {error && <Text style={{color: 'red', textAlign: 'center'}}>{error}</Text>}
         {!isLoading ? 
-        <TouchableOpacity onPress={onPress} style={styles.button} >
-          <Text style={styles.buttonText}>Giriş Yap</Text>
+
+        <>
+        <TouchableOpacity style={styles.forgotWrapper}>
+          <Text style={styles.forgot}>Forgot?</Text>
         </TouchableOpacity>
+          <TouchableOpacity onPress={onPress} style={styles.button} >
+            <Text style={styles.buttonText}>Giriş Yap</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.registerButton}>
+            <Text style={styles.registerText}> Kayıt ol </Text>
+          </TouchableOpacity>
+        </>
         : 
-        <View style={{display: "flex", justifyContent: "center", alignItems: "center"}}><Text stlye={{color: "black", fontSize: 16}}>Loading...</Text></View>}
+        <View style={{display: "flex", justifyContent: "center", alignItems: "center"}}><Text style={{color: "black", fontSize: 16, marginTop: 20}}>Loading...</Text></View>}
       </View>
     <Text style={styles.infoText}>
       ENDÜSTRİ ÇALIŞANLARINDA KÜRESEL İKLİM KRİZİ İLE KRONİK HASTALIKLAR İLİŞKİSİ ÜZERİNE BİLGİ VE TUTUMUN DEĞİŞTİRİLMESİNE YÖNELİK EDUTAINMENT VE VİDEO ANALİZ YÖNTEMİ İLE İNTERAKTİF EĞİTİM PROGRAMI VE MOBİL UYGULAMA GELİŞTİRİLMESİ PROJESİ 
     </Text>
-  </SafeAreaView>
+  </View>
   )
 }
 
@@ -90,19 +102,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
-    marginTop: 50,
     display: 'flex',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '50%',
-    backgroundColor: 'lightblue',
+    width: '100%',
+    backgroundColor: '#fb9e50',
     borderRadius: 10,
-    height: 200,
+    height: 240,
     margin: 'auto',
   },
   formContainer: {
     marginTop: 60,
+    borderWidth: 2,
+    borderColor: 'lightgray',
+    marginHorizontal: 20,
+    justifyContent: "center",
+    display: "flex",
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    borderRadius: 20,
+    paddingBottom: 20,
+    paddingTop: 10,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 5
   },
   infoText: {
     fontSize: 10,
@@ -112,24 +138,44 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#fb9e50',
     padding: 10,
-    borderRadius: 10,
-    marginTop: 20,
-    width: '65%',
+    borderRadius: 5,
+    marginTop: 10,
+    width: '100%',
     alignSelf: 'center',
   },
   buttonText: {
-    color: 'black',
+    color: 'white',
     fontWeight: '700',
     textAlign: 'center',
   },
   input: {
-    height: 40,
-    margin: 12,
+    height: 50,
+    marginTop: 12,
     borderWidth: 2,
     borderColor: 'lightgray',
-    padding: 10,
-    color: 'black'
+    padding: 16,
+    borderRadius: 5,
+    color: 'black',
+    width: '100%',
   },
+  registerButton: {
+    display: 'flex', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10
+  },
+  registerText: {
+    color: '#fb9e50',
+    fontWeight: '800'
+  },
+  forgotWrapper: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    marginTop: 10,
+  },
+  forgot: {
+    color: '#fb9e50',
+  }
 });

@@ -30,7 +30,7 @@ export const VideoScreen = () => {
         const headers = {
           Authorization: `Bearer ${user}`
         };
-        console.log(headers, `headers`)
+        console.log(headers, `sending request with headers`)
   
         axios.get(APIROUTES.getVideos, { headers })
         .then((res) => {
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: 'black'
+    color: 'black',
   },
   titleWrapper: {
     padding: 10,
