@@ -1,81 +1,172 @@
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {Rating, AirbnbRating} from 'react-native-ratings';
+import SelectMultiple from 'react-native-select-multiple';
 import YouTube from 'react-native-youtube';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-import {ScrollView} from 'react-native-gesture-handler';
 import {TouchableWithoutFeedback} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {APIROUTES} from '../constants/apiRoutes';
+import {AppContext} from '../App';
+import axios from 'axios';
+import { VideoForm } from '../components/VideoForm';
 
 export const VideoDetailScreen = ({route}) => {
+  
+  const [rating, setRating] = React.useState(3);
+  const [isRated, setIsRated] = React.useState(false);
+
   const {video} = route.params;
+  const {user, isAdmin} = React.useContext(AppContext);
+  const navigation = useNavigation();
+
+  const fruits = [
+    'İnsanların doğaya karşı duyarsız davranması',
+    'Egzoz gazları',
+    'Kentleşme',
+    'Yeşil alanların yok edilmesi',
+    'Endüstriyel atıklar/fabrika atıkları',
+    'Plastik atıklar',
+    'Mevsimlerin kayması/yer değiştirmesi',
+    'Mevsimlerin özelliklerinin değişmesi',
+    'Aşırı sıcak havalar',
+    'Kuraklık',
+    'Orman yangınları',
+    'Hava kirliliği',
+    'Toprak kirliliği',
+    'Tarım ürünlerinin veriminin ve kalitesinin düşmesi',
+    'Su kaynaklarının olumsuz etkilenmesi',
+    'Balıkların ve suda yaşayan diğer canlıların olumsuz etkilenmesi',
+    'Gıda krizi',
+    'Su krizi',
+    'Hastalıklar',
+    'Erken yaşta ölümler',
+  ];
+
+
   const [value, setValue] = React.useState("")
-  const [items, setItems] = React.useState([
-    { label: 'İnsanların doğaya karşı duyarsız davranması', value: 'İnsanların doğaya karşı duyarsız davranması' },
-    { label: 'Egzoz gazları', value: 'Egzoz gazları' },
-    { label: 'Kentleşme', value: 'Kentleşme' },
-    { label: 'Yeşil alanların yok edilmesi', value: 'Yeşil alanların yok edilmesi' },
-    { label: 'Endüstriyel atıklar/fabrika atıkları', value: 'Endüstriyel atıklar/fabrika atıkları' },
-    { label: 'Plastik atıklar', value: 'Plastik atıklar' },
-    { label: 'Mevsimlerin kayması/yer değiştirmesi', value: 'Mevsimlerin kayması/yer değiştirmesi' },
-    { label: 'Mevsimlerin özelliklerinin değişmesi', value: 'Mevsimlerin özelliklerinin değişmesi' },
-    { label: 'Aşırı sıcak havalar', value: 'Aşırı sıcak havalar' },
-    { label: 'Kuraklık', value: 'Kuraklık' },
-    { label: 'Orman yangınları', value: 'Orman yangınları' },
-    { label: 'Hava kirliliği', value: 'Hava kirliliği' },
-    { label: 'Toprak kirliliği', value: 'Toprak kirliliği' },
-    { label: 'Tarım ürünlerinin veriminin ve kalitesinin düşmesi', value: 'Tarım ürünlerinin veriminin ve kalitesinin düşmesi' },
-    { label: 'Su kaynaklarının olumsuz etkilenmesi', value: 'Su kaynaklarının olumsuz etkilenmesi' },
-    { label: 'Balıkların ve suda yaşayan diğer canlıların olumsuz etkilenmesi', value: 'Balıkların ve suda yaşayan diğer canlıların olumsuz etkilenmesi' },
-    { label: 'Gıda krizi', value: 'Gıda krizi' },
-    { label: 'Su krizi', value: 'Su krizi' },
-    { label: 'Hastalıklar', value: 'Hastalıklar' },
-    { label: 'Erken yaşta ölümler', value: 'Erken yaşta ölümler' }
-  ]);
+  const [isFormOpen, setIsFormOpen] = React.useState(false)
+  const [selectedFruits, setSelectedFruits] = React.useState([]);
+  const [info, setInfo] = React.useState('')
+  const headers = {
+    Authorization: `Bearer ${user}`
+  };
+
+  React.useEffect(()=>{
+    axios
+    .get(APIROUTES.postRating.replace("video_id", video?.id), {headers})
+    .then(res => {
+      console.log(res.data.rating, "get rating")
+      if(res.data.rating) setIsRated(true)
+        setInfo('Cevaplarınız kaydedildi.')
+    })
+    .catch(err => {
+      console.log(err.message)
+    })
+  },[])
   
+  const onSelectionsChange = (selected) => {
+   setSelectedFruits(selected);
+  }
+
+  const ratingCompleted = (rating) => {
+    setRating(rating)
+  }
   
-  console.log(video)
+  const handleEdit = () => {
+    setIsFormOpen(!isFormOpen)
+  }
+
+  const onSave = () => {
+    const selectedQuestions = {};
+
+    // Extracting labels from selectedFruits array
+    const selectedLabels = selectedFruits.map(fruit => fruit.label);
+
+    // Iterating over fruits array to match selected labels and mark them as selected
+    fruits.forEach((question, index) => {
+        const isSelected = selectedLabels.includes(question);
+        selectedQuestions[`question_${index + 1}`] = isSelected;
+    });
+
+    selectedQuestions["rating"] = rating;
+    axios
+    .post(APIROUTES.postRating.replace("video_id", video.id), selectedQuestions , {headers})
+    .then(response => {
+        console.log(response.data, "kaydettin")
+    })
+    .catch(error => {
+        console.error('Error occurred while saving questions:', error.message);
+    });
+  }
+
   const videoId = video?.url?.split('=')[1];
     return (
+      <SafeAreaView>
       <ScrollView>
-        <Text style={styles.header}>{video.title}</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10}}>
+        <View style={{width: 30, height: 30, justifyContent: 'center'}} >
+          <TouchableOpacity onPress={() => navigation.navigate('VideoScreen')}>
+            <Image source={require('../assets/back.png')} style={{width: 30, height: 30}} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, height: '100%' }} >
+        <Text style={styles.header}>{video?.title}</Text>
+        
+        </View>
+        <View style={{ width: 30, height: 30, }} >
+          {isAdmin && (<TouchableOpacity onPress={() => handleEdit()}> 
+            <Image source={require('../assets/edit.png')} style={{width: 30, height: 30}}/>
+            </TouchableOpacity>)}
+        </View>
+      </View>
+
+
         <TouchableWithoutFeedback onPress={() => {}}>
-          <YouTube
+          {video && <YouTube
             videoId={videoId} // The YouTube video ID
             play={true}// control playback of video with true/false
             fullscreen // control whether the video should play in fullscreen or inline
             loop 
             style={styles.video}
-          />
+          />}
         </TouchableWithoutFeedback>
-        <Text style={styles.desc}>{video.description}</Text>
-        <View style={styles.questionsWrapper}>
+        {isFormOpen && <VideoForm editVideoData={video}>form</VideoForm>}
+        <Text style={styles.desc}>{video?.description}</Text>
+        {!isRated ? <View style={styles.questionsWrapper}>
           <Text style={{color: 'black', fontSize: 20, marginBottom: 25}}>Videoda ne dikkatinizi çekti?</Text>
-        <RadioForm
-        radio_props={items}
-        initial={0}
-        value={value}
-        setValue={setValue}
-        withLabels={true}
-        buttonOuterColor={'#008AD8'}
-        defaultButtonColor={'#00000050'}
-        buttonOuterSize={30}
-        buttonInnerColor={'#008AD8'}
-        buttonInnerSize={25}
-        radioFormStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}
-        radioButtonItemStyle={{
-          backgroundColor: '#d3d3d9',
-          width: 80,
-          marginBottom: 10,
-        }}
-        radioButtonLabelStyle={{
-          fontSize: 16,
-          color: '#008AD8'
-        }}
-        onPress={() => {
-          console.log("clicked!")
-        }}
-        />
-        </View>
+          <SelectMultiple
+            items={fruits}
+            selectedItems={selectedFruits}
+            onSelectionsChange={onSelectionsChange}
+          />
+          <View style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+            <Text style={[styles.infoText, {marginTop: 20, fontWeight: 'bold', fontSize: 16}]}>Videoya puanınız nedir?</Text>
+          <AirbnbRating 
+            size={20}
+            reviews={[1,2,3,4,5]}
+            reviewSize={16}
+            onFinishRating={ratingCompleted}
+          />
+          </View>
+          
+          <TouchableOpacity onPress={onSave} style={styles.button}>
+            <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', textAlign:'center'}}>Cevapları Gönder</Text>
+          </TouchableOpacity>
+          <View style={{marginBottom: 130, justifyContent: 'center'}}>
+            {info && <Text style={styles.infoText}>{info}</Text>}
+          </View>
+        </View>: 
+        <Text style={styles.infoText}>Cevaplarınız önceden kaydedildi.</Text>}
       </ScrollView>
+      </SafeAreaView>
     )
 }
 
@@ -85,7 +176,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     padding: 20,
-    color: 'black'
+    color: 'black',
   },
   video: {
     padding: 20,
@@ -94,14 +185,32 @@ const styles = StyleSheet.create({
   },
   desc: {
     padding: 20,
-    fontSize: 16,
+    fontSize: 18,
+    overflow: 'hidden',
     textAlign: 'justify',
-    color: 'black'
+    color: 'black',
   },
   questionsWrapper: {
     padding: 20,
     backgroundColor: '#f9f9f9',
     borderRadius: 10,
     marginTop: 20,
-    }
-})
+  },
+  infoText: {
+    color: 'black',
+    marginHorizontal: 20,
+    alignSelf: 'center',
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 30,
+    marginBottom: 100,
+    borderRadius: 50,
+    backgroundColor: '#fb9e50',
+    width: 130,
+    padding: 20,
+    alignSelf: 'center',
+  }
+});

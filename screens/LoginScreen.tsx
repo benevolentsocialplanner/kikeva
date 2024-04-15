@@ -1,5 +1,5 @@
 import React from 'react'
-import {ActivityIndicator, Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Button, Keyboard, Pressable, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Config from "react-native-config";
 import {APIROUTES} from '../constants/apiRoutes';
 import axios from 'axios';
@@ -12,10 +12,10 @@ export const LoginScreen = () => {
   const [error, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const {setUser, setTokenType} = React.useContext(AppContext);
+  const {setUser, setTokenType, setIsAdmin} = React.useContext(AppContext);
 
   const onPress = async () => {
-
+    setError(null)
     setIsLoading(true)
     if(!password && !username) {
       setError('Kullanıcı adı veya şifre boş olamaz');
@@ -35,9 +35,13 @@ export const LoginScreen = () => {
       setTokenType(res.data?.token_type)
       setUser(res.data?.access_token)
       console.log(res.data, `data`)
+      if(res.data?.role === "admin"){
+        setIsAdmin(true)
+      }
     setIsLoading(false)
     })
     .catch((err)=>{
+      err.message.includes('403') && setError('Hatalı bilgi girdiniz.')
       console.log('Error logging in', err.message)
     setIsLoading(false)
     })
@@ -56,6 +60,7 @@ export const LoginScreen = () => {
       </View>
       <View style={styles.formContainer}>
         <TextInput
+          autoFocus={false}
           placeholder="Kullanıcı adı..."
           style={styles.input}
           onChangeText={(text) => setUsername(text)}
@@ -64,6 +69,7 @@ export const LoginScreen = () => {
 
         />
         <TextInput
+          autoFocus={false}
           placeholder="Şifre..."
           style={styles.input}
           onChangeText={(text) => setPassword(text)}
@@ -72,7 +78,7 @@ export const LoginScreen = () => {
 
           secureTextEntry={true}
         />
-        {error && <Text style={{color: 'red', textAlign: 'center'}}>{error}</Text>}
+        {error && <Text style={{color: 'red', textAlign: 'center', marginTop: 10}}>{error}</Text>}
         {!isLoading ? 
 
         <>
@@ -108,7 +114,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     backgroundColor: '#fb9e50',
-    borderRadius: 10,
     height: 240,
     margin: 'auto',
   },
@@ -124,15 +129,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingBottom: 20,
     paddingTop: 10,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 5
   },
   infoText: {
-    fontSize: 10,
+    fontSize: 14,
     padding: 20,
+    color: 'black',
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 20,

@@ -1,33 +1,35 @@
-import React, {createContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Storage} from './utils/storage';
 import {LoginScreen} from './screens/LoginScreen';
-import {VideoScreen} from './screens/VideoScreen';
 import {VideoDetailScreen} from './screens/VideoDetailScreen';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import { AdminScreen } from './screens/AdminScreen';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import BottomTabNavigation from './navigation/BottomTabNavigation';
+import UserDetailScreen from './screens/UserDetailScreen';
+import AnswersScreen from './screens/AnswersScreen';
 
-const Stack = createStackNavigator();
-
+const Stack = createNativeStackNavigator();
 
 // Create a context
 export const AppContext = React.createContext({
   user: undefined,
   setUser: (obj: string | undefined) => obj,
+  isAdmin: false,
+  setIsAdmin: (obj: boolean) => obj,
   tokenType: undefined,
   setTokenType: (obj: string | undefined) => obj,
 });
 function App() {
-  // Define state for user
   const [user, setUser] = useState(null);
   const [tokenType, setTokenType] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     const loadUser = async () => {
       try {
-        const user = await Storage.getItem("user");
-        user && setUser(user);
-
+        await Storage.setItem('user', user);
+        console.log(user, 'user');
+        console.log(await Storage.getItem('user'), 'user from storage');
       } catch (error) {
         console.error("Error loading user from storage", error);
       }
@@ -38,8 +40,7 @@ function App() {
   React.useEffect(() => {
     const loadTokenType = async () => {
       try {
-        const tokenType = await Storage.getItem("tokenType");
-        tokenType && setTokenType(tokenType);
+        await Storage.setItem("tokenType", tokenType);
 
       } catch (error) {
         console.error("Error loading tokenType from storage", error);
@@ -48,22 +49,64 @@ function App() {
     loadTokenType();
   }, [tokenType]);
 
+  React.useEffect(() => {
+    const loadIsAdmin = async () => {
+      try {
+        await Storage.setItem("isAdmin", isAdmin);
+      } catch (error) {
+        console.log("Error loading the permissions", error.message)
+      }
+    }
+    loadIsAdmin();
+  }, [isAdmin])
+
+  React.useEffect(() => {
+    const loadCredentials = async () => {
+      try {
+        const checkAdmin = await Storage.getItem("isAdmin")
+        const checkType = await Storage.getItem("tokenType")
+        const checkUser = await Storage.getItem("user")
+        checkAdmin && setIsAdmin(checkAdmin)
+        checkType && setTokenType(checkType)
+        checkUser && setUser(checkUser)
+        console.log(checkAdmin, checkType, checkUser, "check")
+      } catch (error) {
+        console.log(error?.mesage, "error mounting")
+      }
+    }
+    loadCredentials();
+  },[])
+
   return (
-    // Wrap the application with the context provider
-    <AppContext.Provider value={{ user, setUser, tokenType, setTokenType }}>
-      {user && tokenType ? 
-        <>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen name="VideoScreen" component={VideoScreen} />
-              <Stack.Screen name="VideoDetailScreen" component={VideoDetailScreen} />
-              <Stack.Screen name="AdminScreen" component={AdminScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </>
-        : 
+    <AppContext.Provider value={{ user, setUser, tokenType, setTokenType, isAdmin, setIsAdmin }}>
+      {user?.length > 0 ? (
+        <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen 
+              options={{headerShown: false}}
+           name={'BottomTabNavigation'}
+           component={BottomTabNavigation}
+            />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name={"VideoDetailScreen"}
+            component={VideoDetailScreen}
+            />
+            <Stack.Screen
+            options={{headerShown: false}}
+            name={"UserDetailScreen"}
+            component={UserDetailScreen}
+            />
+            <Stack.Screen
+            options={{headerShown: false}}
+            name={"AnswersScreen"}
+            component={AnswersScreen}
+            />
+        </Stack.Navigator>
+      </NavigationContainer>
+      ) : (
         <LoginScreen/> 
-        }
+      )}
     </AppContext.Provider>
   );
 }
