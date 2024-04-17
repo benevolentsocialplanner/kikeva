@@ -94,7 +94,7 @@ export const AdminScreen = () => {
               style={styles.image}
               source={require('../assets/plus.png')}
             />
-            <Text>Kullanici Ekle</Text>
+            <Text style={{color:'black'}}>Kullanici Ekle</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.chipWrapper}
@@ -106,7 +106,7 @@ export const AdminScreen = () => {
               style={styles.image}
               source={require('../assets/plus.png')}
             />
-            <Text>Video Ekle</Text>
+            <Text style={{color:'black'}}>Video Ekle</Text>
           </TouchableOpacity>
         </View>
 
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 30,
     paddingTop: 20,
+    color: 'black',
     paddingBottom: 10,
   },
   chipWrapper: {

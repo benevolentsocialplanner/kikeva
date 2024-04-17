@@ -1,5 +1,13 @@
 import React from 'react';
-import {Text, View, SafeAreaView, Image, StyleSheet, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  SafeAreaView,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Linking,
+} from 'react-native';
 
 
 export const InfoScreen = () => {
@@ -18,43 +26,40 @@ export const InfoScreen = () => {
             <Text style={styles.head}>
               Kikeva Hakkında:
             </Text>
-            <Text>
+            <Text style={{color: 'black'}}>
             ENDÜSTRI CALISANLARINDA KÜRESEL IKLIM KRIZi
             iLE KRONIK HASTALIKLAR ILISKISI ÜZERINE BILGi VE
             TUTUMUN DEGISTIRILMESINE YÖNELIK EDUTAINMENT
             VE VIDEO ANALIZ YÖNTEMI ILE INTERAKTIF EGITIM PROGRAMI VE MOBIL UYGULAMA GELISTIRILMESi
             PROJESI (KIKEVA-EP)
             </Text>
+            
             <Text style={styles.head}>Proje Yürütücüsü</Text>
-            <Text>
-              Prof. Dr. Murat Topbas (KTU Tip Fakültesi Halk Sagligi AD)
+            <Text style={{color: 'black'}} onPress={() => Linking.openURL('https://avesis.ktu.edu.tr/mtopbas')}>
+              Prof. Dr. Murat Topbaş (KTU Tıp Fakültesi Halk Sağlığı AD)
             </Text>
-            <Text style={styles.head}>Arastirmacilar</Text>
-            <Text>
-              Ars. Gör. Dr. Nalan Ozen
-            </Text>
-            <View style={{padding: 1, marginVertical :2, backgroundColor: 'black'}}/>
-            <Text>
-              Prof. Dr. Nazim Ercüment Beyhun
+
+            <Text style={styles.head}>Araştırmacılar</Text>
+            <Text style={{color: 'black'}} onPress={() => Linking.openURL('https://avesis.ktu.edu.tr/nozen')}>
+              Ars. Gör. Dr. Nalan Özen
             </Text>
             <View style={{padding: 1, marginVertical :2, backgroundColor: 'black'}}/>
-            <Text>
-              Dr. Ögr. Üyesi Sevil Turhan (KTÜ Tip Fakültesi Halk Sagligi
-              Anabilim Dali)
+
+            <Text style={{color: 'black'}} onPress={() => Linking.openURL('https://avesis.ktu.edu.tr/ebeyhun')}>
+              Prof. Dr. Nazım Ercüment Beyhun
             </Text>
             <View style={{padding: 1, marginVertical :2, backgroundColor: 'black'}}/>
-            <Text>
-              Prof. Dr. Erol Nezih Orhon (Anadolu Üniversitesi iletisim
-              Bilimleri Fakultesi Sinema ve Televizyon Bolümü)
+
+            <Text style={{color: 'black'}} onPress={() => Linking.openURL('https://avesis.ktu.edu.tr/sevilturhan')}>
+              Dr. Öğr. Üyesi Sevil Turhan (KTÜ Tıp Fakültesi Halk Sağlığı Anabilim Dalı)
             </Text>
             <View style={{padding: 1, marginVertical :2, backgroundColor: 'black'}}/>
-            <Text>
-            Prof. Dr. Ahmet Altı
+
+            <Text style={{color: 'black'}} onPress={() => Linking.openURL('https://avesis.anadolu.edu.tr/enorhon')}>
+              Prof. Dr. Erol Nezih Orhon (Anadolu Üniversitesi İletişim Bilimleri Fakültesi Sinema ve Televizyon Bölümü)
             </Text>
             <View style={{padding: 1, marginVertical :2, backgroundColor: 'black'}}/>
-            <Text>
-            Yüksek Bilgisayar Müh. Yusuf Özen
-            </Text>
+            
         </View> 
         </ScrollView>     
       </SafeAreaView>
@@ -73,5 +78,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 10,
+    color: 'black'
   }
 })

@@ -101,7 +101,7 @@ export const VideoScreen = () => {
               )}
             </TouchableOpacity>
           ))}
-          <Button title="Logout" onPress={handleLogout} />
+          <Button title="Çıkış Yap" onPress={handleLogout} />
         </View>
       </ScrollView>
 

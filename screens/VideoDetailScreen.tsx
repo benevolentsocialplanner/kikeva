@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {Rating, AirbnbRating} from 'react-native-ratings';
+import {AirbnbRating} from 'react-native-ratings';
 import SelectMultiple from 'react-native-select-multiple';
 import YouTube from 'react-native-youtube';
 import {TouchableWithoutFeedback} from 'react-native';
@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import {APIROUTES} from '../constants/apiRoutes';
 import {AppContext} from '../App';
 import axios from 'axios';
-import { VideoForm } from '../components/VideoForm';
+import {VideoForm} from '../components/VideoForm';
 
 export const VideoDetailScreen = ({route}) => {
   
@@ -107,6 +107,14 @@ export const VideoDetailScreen = ({route}) => {
     });
   }
 
+  const renderLabel = (label, style) => {
+    return (
+        <View style={{marginLeft: 10}}>
+          <Text style={{color: 'black'}}>{label}</Text>
+        </View>
+    )
+  }
+
   const videoId = video?.url?.split('=')[1];
     return (
       <SafeAreaView>
@@ -146,6 +154,7 @@ export const VideoDetailScreen = ({route}) => {
             items={fruits}
             selectedItems={selectedFruits}
             onSelectionsChange={onSelectionsChange}
+            renderLabel={renderLabel}
           />
           <View style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
             <Text style={[styles.infoText, {marginTop: 20, fontWeight: 'bold', fontSize: 16}]}>Videoya puanınız nedir?</Text>

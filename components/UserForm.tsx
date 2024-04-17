@@ -162,7 +162,7 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
         <TouchableOpacity onPress={handleSubmitUser} style={styles.button} disabled={isLoading}>
             <Text style={styles.buttonText}>Kaydet</Text>
         </TouchableOpacity>
-        {info && info.length > 0 && <Text style={{fontSize: 18, textAlign: 'center', margin: 10}}>{info}</Text>}
+        {info && info.length > 0 && <Text style={{fontSize: 18, textAlign: 'center', margin: 10, color: 'black'}}>{info}</Text>}
       </ScrollView>
   );
 };
