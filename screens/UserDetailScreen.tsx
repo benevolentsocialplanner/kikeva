@@ -1,9 +1,16 @@
-import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import React from 'react';
-import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { APIROUTES } from '../constants/apiRoutes';
-import { AppContext } from '../App';
+import {useNavigation} from '@react-navigation/native';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {APIROUTES} from '../constants/apiRoutes';
+import {AppContext} from '../App';
 
 const UserDetailScreen = ({route}) => {
   console.log(route.params.user);

@@ -5,21 +5,25 @@ import {VideoScreen} from '../screens/VideoScreen';
 import {AppContext} from '../App';
 import {AdminScreen} from '../screens/AdminScreen';
 import {InfoScreen} from '../screens/InfoScreen';
-import UserInfoScreen from '../screens/UserInfoScreen';
 
 const Tab = createBottomTabNavigator();
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
 const screenOptions = {
-  tabBarShowLabel: false,
+  tabBarShowLabel: true,
   tabBarHideOnKeyboard: true,
   headerShown: false,
+  tabBarLabelStyle: {
+    color: 'black',
+    marginTop: 4,
+  },
   tabBarStyle: {
     marginBottom: 75,
     backgroundColor: '#fb9e50',
     borderRadius: 50,
     left: '20%',
     width: '60%',
+    color: 'black',
     paddingHorizontal: 30,
     paddingTop: 10,
     paddingBottom: 10,
@@ -36,7 +40,7 @@ const BottomTabNavigation = ({navigation}) => {
     <>
       <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen
-          name="VideoScreen"
+          name="Videolar"
           component={VideoScreen}
           options={{
             tabBarIcon: ({focused}) => {
@@ -50,7 +54,7 @@ const BottomTabNavigation = ({navigation}) => {
           }}
         />
         <Tab.Screen
-          name="InfoScreen"
+          name="Proje Bilgisi"
           component={InfoScreen}
           options={{
             tabBarIcon: ({focused}) => {
@@ -65,7 +69,7 @@ const BottomTabNavigation = ({navigation}) => {
         />
         {isAdmin &&(
             <Tab.Screen
-            name="AdminScreen"
+            name="Admin"
             component={AdminScreen}
             options={{
               tabBarIcon: ({focused}) => {

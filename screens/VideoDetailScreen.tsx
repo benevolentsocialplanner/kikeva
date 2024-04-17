@@ -121,13 +121,12 @@ export const VideoDetailScreen = ({route}) => {
       <ScrollView>
       <View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10}}>
         <View style={{width: 30, height: 30, justifyContent: 'center'}} >
-          <TouchableOpacity onPress={() => navigation.navigate('VideoScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Videolar')}>
             <Image source={require('../assets/back.png')} style={{width: 30, height: 30}} />
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1, height: '100%' }} >
         <Text style={styles.header}>{video?.title}</Text>
-        
         </View>
         <View style={{ width: 30, height: 30, }} >
           {isAdmin && (<TouchableOpacity onPress={() => handleEdit()}> 

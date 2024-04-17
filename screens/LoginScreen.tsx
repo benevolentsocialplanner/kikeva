@@ -93,11 +93,12 @@ export const LoginScreen = () => {
           </TouchableOpacity>
         </>
         : 
-        <View style={{display: "flex", justifyContent: "center", alignItems: "center"}}><Text style={{color: "black", fontSize: 16, marginTop: 20}}>Loading...</Text></View>}
+        <View style={{display: "flex", justifyContent: "center", alignItems: "center"}}><Text style={{color: "black", fontSize: 16, marginTop: 20}}>Giriş yapılıyor...</Text></View>}
       </View>
     <Text style={styles.infoText}>
       ENDÜSTRİ ÇALIŞANLARINDA KÜRESEL İKLİM KRİZİ İLE KRONİK HASTALIKLAR İLİŞKİSİ ÜZERİNE BİLGİ VE TUTUMUN DEĞİŞTİRİLMESİNE YÖNELİK EDUTAINMENT VE VİDEO ANALİZ YÖNTEMİ İLE İNTERAKTİF EĞİTİM PROGRAMI VE MOBİL UYGULAMA GELİŞTİRİLMESİ PROJESİ 
     </Text>
+    <View style={{flex: 1, backgroundColor: 'white'}}></View>
   </View>
   )
 }
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     justifyContent: 'center',
+    flex: 1,
   },
   logoContainer: {
     display: 'flex',

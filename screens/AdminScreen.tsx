@@ -52,6 +52,7 @@ export const AdminScreen = () => {
     axios.delete(`${APIROUTES.getUsers}${item.id}`, {headers})
     .then(res => {
       console.log(res.data, "silindi")
+      setUsers(users.filter(user => user.id !== item.id))
     })
     .catch(err => {
       console.log(err.message, "silinemedi")
@@ -77,6 +78,8 @@ export const AdminScreen = () => {
 
     fetchUsers();
   }, []);
+
+
 
   return (
     <SafeAreaView>
