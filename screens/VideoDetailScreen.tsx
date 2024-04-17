@@ -17,6 +17,7 @@ import {APIROUTES} from '../constants/apiRoutes';
 import {AppContext} from '../App';
 import axios from 'axios';
 import {VideoForm} from '../components/VideoForm';
+import WebView from 'react-native-webview';
 
 export const VideoDetailScreen = ({route}) => {
   
@@ -63,7 +64,6 @@ export const VideoDetailScreen = ({route}) => {
     axios
     .get(APIROUTES.postRating.replace("video_id", video?.id), {headers})
     .then(res => {
-      console.log(res.data.rating, "get rating")
       if(res.data.rating) setIsRated(true)
         setInfo('Cevaplarınız kaydedildi.')
     })
@@ -115,7 +115,7 @@ export const VideoDetailScreen = ({route}) => {
     )
   }
 
-  const videoId = video?.url?.split('=')[1];
+  const videoEmbedUrl = video.url.replace('watch?v=', 'embed/');
     return (
       <SafeAreaView>
       <ScrollView>
@@ -138,13 +138,12 @@ export const VideoDetailScreen = ({route}) => {
 
 
         <TouchableWithoutFeedback onPress={() => {}}>
-          {video && <YouTube
-            videoId={videoId} // The YouTube video ID
-            play={true}// control playback of video with true/false
-            fullscreen // control whether the video should play in fullscreen or inline
-            loop 
-            style={styles.video}
-          />}
+          {video && <WebView
+        style={{marginTop: 20, width: '90%', height: 230, marginHorizontal: 'auto', alignSelf: 'center'}}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        source={{uri: videoEmbedUrl}}
+      />}
         </TouchableWithoutFeedback>
         {isFormOpen && <VideoForm editVideoData={video}>form</VideoForm>}
         <Text style={styles.desc}>{video?.description}</Text>
