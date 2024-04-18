@@ -22,7 +22,7 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
     {key:'3', value:'user'},
   ];
   
-  const {user} = React.useContext(AppContext);
+  const {user, users, setUsers} = React.useContext(AppContext);
   
   const headers = {
     Authorization: `Bearer ${user}`
@@ -49,17 +49,17 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
     setIsLoading(true);
     setInfo('');
     if (editFormData) {
-      console.log(`${APIROUTES.getUsers}${editFormData.id}/`)
-      console.log('editliyoruz')
       axios
       .put(`${APIROUTES.getUsers}${editFormData.id}`, formData, {headers})
       .then((res) => {
-        console.log(res.data, "guncellendi")
+        const updatedUserIndex = users.findIndex(u => u.id === editFormData.id);
+        const updatedUsers = [...users];
+        updatedUsers[updatedUserIndex] = formData;
+        setUsers(updatedUsers);
         setInfo('Kullanıcı başarıyla güncellendi')
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err.message)
         setInfo('Kullanıcı güncellenirken bir hata oluştu.')
       })
       .finally(() => {
@@ -69,10 +69,10 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
       axios
       .post(APIROUTES.getUsers, formData, {headers})
       .then((res) => {
+        setUsers([...users, formData]);
         setInfo('Kullanıcı başarıyla eklendi')
       })
       .catch((err) => {
-        console.log(err.message)
         setInfo('Kullanıcı eklenirken bir hata oluştu')
         err.message.includes(400) && setInfo('Kullanıcı zaten var.')
 
@@ -90,18 +90,21 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
         <TextInput
           style={styles.textInput}
           placeholder="Name..."
+          placeholderTextColor={'#000'}
           value={formData.name}
           onChangeText={(value) => setFormData({ ...formData, name: value })}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Phone Number..."
+          placeholderTextColor={'#000'}
           value={formData.phone_number}
           onChangeText={(value) => setFormData({ ...formData, phone_number: value })}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Password..."
+          placeholderTextColor={'#000'}
           value={formData.password}
           onChangeText={(value) => setFormData({ ...formData, password: value })}
           secureTextEntry={true}
@@ -111,6 +114,8 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
             setSelected={(val) => setSelected(val)} 
             data={roleData} 
             save="value"
+            dropdownTextStyles={{color: 'black'}}
+            inputStyles={{color: 'black'}}
             placeholder="Rol seçiniz"
           />
         </View>
@@ -118,6 +123,7 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
           style={styles.textInput}
           placeholder="Age..."
           value={formData.age}
+          placeholderTextColor={'#000'}
           onChangeText={(value) => setFormData({ ...formData, age: value })}
           keyboardType="numeric"
         />
@@ -126,29 +132,34 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
           style={styles.textInput}
           placeholder="Gender..."
           value={formData.gender}
+          placeholderTextColor={'#000'}
           onChangeText={(value) => setFormData({ ...formData, gender: value })}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Email..."
           value={formData.email}
+          placeholderTextColor={'#000'}
           onChangeText={(value) => setFormData({ ...formData, email: value })}
           keyboardType="email-address"
         />
         <TextInput
           style={styles.textInput}
           placeholder="Working At..."
+          placeholderTextColor={'#000'}
           value={formData.working_at}
           onChangeText={(value) => setFormData({ ...formData, working_at: value })}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Sector..."
+          placeholderTextColor={'#000'}
           value={formData.sector}
           onChangeText={(value) => setFormData({ ...formData, sector: value })}
         />
         <TextInput
           style={styles.textInput}
+          placeholderTextColor={'#000'}
           placeholder="Job..."
           value={formData.job}
           onChangeText={(value) => setFormData({ ...formData, job: value })}
@@ -156,6 +167,7 @@ const UserForm: React.FC<UserFormProps> = ({ editFormData, mode = 'add' }) => {
         <TextInput
           style={styles.textInput}
           placeholder="Status..."
+          placeholderTextColor={'#000'}
           value={formData.status}
           onChangeText={(value) => setFormData({ ...formData, status: value })}
         />

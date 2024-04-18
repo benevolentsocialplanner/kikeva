@@ -23,7 +23,7 @@ type Video = {
 };
 
 export const VideoScreen = () => {
-  const [videos, setVideos] = React.useState<Video[]>([]);
+  const {videos, setVideos} = React.useContext(AppContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const {tokenType, user, setUser, isAdmin, setIsAdmin, setTokenType} = React.useContext(AppContext);
@@ -85,15 +85,15 @@ export const VideoScreen = () => {
     <SafeAreaView>
       {isLoading && <Text>Loading...</Text>}
       <Text style={styles.head}>Videolar</Text>
-      <ScrollView>
+      <ScrollView style={{marginBottom: 130}}>
         <View style={styles.columnSection}>
           {videos.map((video, index) => (
             <TouchableOpacity
               key={index}
-              style={styles.titleWrapper}
+              style={[styles.titleWrapper, video.is_rated ? {backgroundColor: 'green'} : {backgroundColor: 'lightgray'}]}
               onPress={() => navigation.navigate('VideoDetailScreen', { video: video })}
             >
-              <Text key={index} style={{ color: "black" }}>{video.title}</Text>
+              <Text key={index} style={ video.is_rated ? {color: 'white', fontWeight: 600} : {color: 'black', fontWeight: 600}}>{video.title}</Text>
               {isAdmin && (
               <TouchableOpacity onPress={() => handleDelete(video)}>
                 <Image source={require('../assets/trash.png')} style={{ width: 30, height: 30 }} />
@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     padding: 10,
-    backgroundColor: 'lightgrey',
     borderRadius: 5,
     display: 'flex',
     flexDirection: 'row',

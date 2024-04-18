@@ -23,7 +23,7 @@ export const VideoForm = ({editVideoData}) => {
   const [info, setInfo] = React.useState('');
   const [selected, setSelected] = React.useState(false);
 
-  const {user} = React.useContext(AppContext);
+  const {user, videos, setVideos} = React.useContext(AppContext);
 
   const status = [
     {key: 1, value: "true"},
@@ -51,7 +51,8 @@ export const VideoForm = ({editVideoData}) => {
       .post(APIROUTES.postVideo, videoFormData, {headers})
       .then((res) => {
         setInfo('Video başarıyla eklendi');
-        console.log(res, "VIDEO")
+        setVideos([...videos, res.data])
+        console.log(res.data, "VIDEO")
       })
       .catch((err) => {
         console.log(err.message);
@@ -69,18 +70,21 @@ export const VideoForm = ({editVideoData}) => {
         style={styles.textInput}
         placeholder="URL"
         value={videoFormData.url}
+        placeholderTextColor={'#000'}
         onChangeText={(value) => setVideoFormData({ ...videoFormData, url: value })}
       />
       <TextInput
         style={styles.textInput}
         placeholder="Title"
         value={videoFormData.title}
+        placeholderTextColor={'#000'}
         onChangeText={(value) => setVideoFormData({ ...videoFormData, title: value })}
       />
       <TextInput
         style={styles.textInput}
         placeholder="Description"
         value={videoFormData.description}
+        placeholderTextColor={'#000'}
         onChangeText={(value) => setVideoFormData({ ...videoFormData, description: value })}
         multiline={true}
       />
@@ -89,6 +93,8 @@ export const VideoForm = ({editVideoData}) => {
             search={false}
             setSelected={(val) => setSelected(val)} 
             data={status} 
+            dropdownTextStyles={{color: 'black'}}
+            inputStyles={{color: 'black'}}
             save="value"
             placeholder="Select status"
           />

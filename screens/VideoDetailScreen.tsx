@@ -50,7 +50,19 @@ export const VideoDetailScreen = ({route}) => {
     'Hastalıklar',
     'Erken yaşta ölümler',
   ];
-
+  const secondFruits = [
+    'Kanser',
+    'Solunum yolu hastalıkları',
+    'Alerjik Hastalıklar',
+    'Cilt hastalıkları',
+    'Göz hastalıkları',
+    'Diyabet Hastalığı',
+    'Hipertansiyon',
+    'Kalp ve damar hastalıkları',
+    'Böbrek hastalıkları',
+    'Üreme sağlığını etkileyen hastalıklar',
+    'Psikiyatrik hastalıklar',
+  ]
 
   const [value, setValue] = React.useState("")
   const [isFormOpen, setIsFormOpen] = React.useState(false)
@@ -60,18 +72,22 @@ export const VideoDetailScreen = ({route}) => {
     Authorization: `Bearer ${user}`
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
+    console.log(selectedFruits)
+  }, [selectedFruits]);
+
+  React.useEffect(() => {
     axios
-    .get(APIROUTES.postRating.replace("video_id", video?.id), {headers})
-    .then(res => {
-      if(res.data.rating) setIsRated(true)
-        setInfo('Cevaplarınız kaydedildi.')
+      .get(APIROUTES.postRating.replace('video_id', video?.id), {headers})
+      .then(res => {
+        if (res.data.rating) setIsRated(true);
+        setInfo('Cevaplarınız kaydedildi.');
     })
-    .catch(err => {
-      console.log(err.message)
-    })
-  },[])
-  
+      .catch(err => {
+        console.log(err.message);
+      });
+  }, []);
+
   const onSelectionsChange = (selected) => {
    setSelectedFruits(selected);
   }
@@ -86,28 +102,29 @@ export const VideoDetailScreen = ({route}) => {
 
   const onSave = () => {
     const selectedQuestions = {};
-
-    // Extracting labels from selectedFruits array
     const selectedLabels = selectedFruits.map(fruit => fruit.label);
 
-    // Iterating over fruits array to match selected labels and mark them as selected
     fruits.forEach((question, index) => {
         const isSelected = selectedLabels.includes(question);
         selectedQuestions[`question_${index + 1}`] = isSelected;
     });
 
     selectedQuestions["rating"] = rating;
+    console.log(video)
     axios
-    .post(APIROUTES.postRating.replace("video_id", video.id), selectedQuestions , {headers})
+    .post(APIROUTES.postRating.replace("video_id", video?.id), selectedQuestions , {headers})
     .then(response => {
-        console.log(response.data, "kaydettin")
+        navigation.navigate('Videolar');
+        setInfo('Başarıyla kaydedildi.')
     })
     .catch(error => {
         console.error('Error occurred while saving questions:', error.message);
+        setInfo('Bir hata oluştu. Lütfen tekrar deneyin.');
     });
   }
 
   const renderLabel = (label, style) => {
+
     return (
         <View style={{marginLeft: 10}}>
           <Text style={{color: 'black'}}>{label}</Text>
@@ -135,21 +152,30 @@ export const VideoDetailScreen = ({route}) => {
         </View>
       </View>
 
-
-        <TouchableWithoutFeedback onPress={() => {}}>
-          {video && <WebView
-        style={{marginTop: 20, width: '90%', height: 230, marginHorizontal: 'auto', alignSelf: 'center'}}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        source={{uri: videoEmbedUrl}}
-      />}
+        <View style={{backgroundColor: 'white'}}>
+        <TouchableWithoutFeedback onPress={() => {}} style={{}}>
+          {video &&  <WebView
+              style={{marginTop: -74, width: 1000, height: 370, marginHorizontal: 'auto', alignSelf: 'center'}}
+              javaScriptEnabled={true}
+              scalesPageToFit={false}
+              scrollEnabled={false}
+              domStorageEnabled={true}
+              source={{uri: 'https://drive.google.com/file/d/1aWU8LLUMpK98Mx1g7wlD7U0fxNPwgzST/view'}}
+            />}
         </TouchableWithoutFeedback>
         {isFormOpen && <VideoForm editVideoData={video}>form</VideoForm>}
-        <Text style={styles.desc}>{video?.description}</Text>
+        <Text style={[styles.desc, {marginTop: -70, backgroundColor: 'white', height: 70}]}>{video?.description}</Text>
         {!isRated ? <View style={styles.questionsWrapper}>
-          <Text style={{color: 'black', fontSize: 20, marginBottom: 25}}>Videoda ne dikkatinizi çekti?</Text>
+          <Text style={{color: 'black', fontSize: 20, marginBottom: 25, marginTop: -15, zIndex: 999}}>Videoda dikkatinizi çeken iklim krizi özellikleri nelerdir? (Birden fazla seçenek işaretlenebilir)</Text>
           <SelectMultiple
             items={fruits}
+            selectedItems={selectedFruits}
+            onSelectionsChange={onSelectionsChange}
+            renderLabel={renderLabel}
+          />
+          <Text style={{color: 'black', fontSize: 20, marginBottom: 25, marginTop: 15, zIndex: 999}}>Videoda dikkatinizi çeken kronik hastalık/sağlık özellikleri nelerdir? (Birden fazla seçenek işaretlenebilir)</Text>
+          <SelectMultiple
+            items={secondFruits}
             selectedItems={selectedFruits}
             onSelectionsChange={onSelectionsChange}
             renderLabel={renderLabel}
@@ -172,6 +198,7 @@ export const VideoDetailScreen = ({route}) => {
           </View>
         </View>: 
         <Text style={styles.infoText}>Cevaplarınız önceden kaydedildi.</Text>}
+        </View>
       </ScrollView>
       </SafeAreaView>
     )
@@ -199,7 +226,7 @@ const styles = StyleSheet.create({
   },
   questionsWrapper: {
     padding: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: 'white',
     borderRadius: 10,
     marginTop: 20,
   },

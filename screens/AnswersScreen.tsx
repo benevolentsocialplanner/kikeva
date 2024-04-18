@@ -51,8 +51,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 20, 
-    fontWeight: 'bold'
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
   },
   image: {
     width: 30,
@@ -63,13 +64,15 @@ const styles = StyleSheet.create({
     margin: 'auto',
     fontSize: 24,
     overflow: 'hidden',
+    color: 'black',
   },
   card: {
     backgroundColor: 'lightgrey',
     marginHorizontal: 10,
     marginVertical: 10,
-    padding: 10,
+    marginBottom: 80,
     borderRadius: 10,
+    padding: 10
   }
 })
 

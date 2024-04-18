@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     margin: 'auto',
   },
   formContainer: {
-    marginTop: 60,
+    marginTop: 20,
     borderWidth: 2,
     borderColor: 'lightgray',
     marginHorizontal: 20,

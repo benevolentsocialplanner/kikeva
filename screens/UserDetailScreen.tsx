@@ -61,10 +61,10 @@ const UserDetailScreen = ({route}) => {
         answeredVids.map((answers, index) => {
           return(
             <TouchableOpacity key={index} style={styles.tabContainer} onPress={() => navigation.navigate('AnswersScreen', {answers, user: route.params.user})}>
-              <Text>
+              <Text style={{color: 'black'}}>
                 {answers.video.title}
               </Text>
-              {answers.rating && <Text>Rating: {JSON.stringify(answers.rating)}</Text>}
+              {answers.rating && <Text style={{color: 'black'}}>Rating: {JSON.stringify(answers.rating)}</Text>}
             </TouchableOpacity>
           )
         })
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 'auto',
     fontSize: 24,
+    color: 'black',
     overflow: 'hidden',
   },
   tabContainer: {

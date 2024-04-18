@@ -18,7 +18,7 @@ const screenOptions = {
     marginTop: 4,
   },
   tabBarStyle: {
-    marginBottom: 75,
+    marginBottom: 30,
     backgroundColor: '#fb9e50',
     borderRadius: 50,
     left: '20%',
@@ -29,7 +29,7 @@ const screenOptions = {
     paddingBottom: 10,
     position: 'absolute',
     zIndex: 100,
-    height: SCREEN_HEIGHT * 0.07, // Set height to 10% of screen height
+    height: SCREEN_HEIGHT * 0.1, // Set height to 10% of screen height
   } as ViewStyle,
 };
 

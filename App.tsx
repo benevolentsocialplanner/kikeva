@@ -7,6 +7,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import BottomTabNavigation from './navigation/BottomTabNavigation';
 import UserDetailScreen from './screens/UserDetailScreen';
 import AnswersScreen from './screens/AnswersScreen';
+import axios from 'axios';
+import { APIROUTES } from './constants/apiRoutes';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,11 +20,17 @@ export const AppContext = React.createContext({
   setIsAdmin: (obj: boolean) => obj,
   tokenType: undefined,
   setTokenType: (obj: string | undefined) => obj,
+  videos: [],
+  setVideos: (obj: unknown) => obj,
+  users: [],
+  setUsers: (obj: unknown) => obj,
 });
 function App() {
   const [user, setUser] = useState(null);
   const [tokenType, setTokenType] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [videos, setVideos] = useState([]);
+  const [users, setUsers] = useState([]);
 
   React.useEffect(() => {
     const loadUser = async () => {
@@ -77,8 +85,30 @@ function App() {
     loadCredentials();
   },[])
 
+
+  React.useEffect(() => {
+    const fetchUsers = (headers: String) => {
+      axios
+        .get(APIROUTES.getUsers, {headers})
+        .then(res => {
+          setUsers(res.data);
+        })
+        .catch(err => {
+          console.log(err.message);
+        });
+    };
+
+    if(isAdmin && user) {
+      let headers = {
+        Authorization: `Bearer ${user}`
+      }
+      fetchUsers(headers);
+    }
+
+  }, [isAdmin]);
+
   return (
-    <AppContext.Provider value={{ user, setUser, tokenType, setTokenType, isAdmin, setIsAdmin }}>
+    <AppContext.Provider value={{user, setUser, tokenType, setTokenType, isAdmin, setIsAdmin, users, setUsers, videos,setVideos}}>
       {user?.length > 0 ? (
         <NavigationContainer>
         <Stack.Navigator>

@@ -28,7 +28,8 @@
     "react-native-select-multiple": "^2.1.0",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-webview": "^13.8.4",
-    "react-native-youtube": "^2.0.2"
+    "react-native-youtube": "^2.0.2",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

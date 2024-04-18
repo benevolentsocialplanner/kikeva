@@ -30,7 +30,7 @@ type UserData = {
 };
 
 export const AdminScreen = () => {
-  const [users, setUsers] = React.useState<UserData[]>([]);
+  const {users, setUsers} = React.useContext(AppContext);
   const [activeStyles, setActiveStyles] = React.useState({});
   const [isOpenUserForm, setIsOpenUserForm] = React.useState(false);
   const [isOpenVideoForm, setIsOpenVideoForm] = React.useState(false);
@@ -48,10 +48,8 @@ export const AdminScreen = () => {
   };
 
   const handleDelete = (item) => {
-    console.log('handleDelete', item);
     axios.delete(`${APIROUTES.getUsers}${item.id}`, {headers})
     .then(res => {
-      console.log(res.data, "silindi")
       setUsers(users.filter(user => user.id !== item.id))
     })
     .catch(err => {
@@ -168,7 +166,6 @@ export const AdminScreen = () => {
                       <Text style={styles.p}>Meslek: </Text>
                       <Text style={styles.pContent}>{user.job}</Text>
                     </View>
-
                     <TouchableOpacity style={styles.navigation} onPress={() => navigation.navigate('UserDetailScreen',  {user})}><Text style={styles.navText}>Detayları gör...</Text></TouchableOpacity>
                   </TouchableOpacity>
             </View>
