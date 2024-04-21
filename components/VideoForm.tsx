@@ -13,15 +13,16 @@ import axios from 'axios';
 import {SelectList} from 'react-native-dropdown-select-list';
 
 export const VideoForm = ({editVideoData}) => {
+  const [selected, setSelected] = React.useState(false);
+
   const [videoFormData, setVideoFormData] = React.useState(editVideoData ? editVideoData : {
     url: '',
     title: '',
     description: '',
-    is_active: true,
+    is_active: selected,
   });
   const [isLoading, setIsLoading] = React.useState(false);
   const [info, setInfo] = React.useState('');
-  const [selected, setSelected] = React.useState(false);
 
   const {user, videos, setVideos} = React.useContext(AppContext);
 
@@ -41,18 +42,19 @@ export const VideoForm = ({editVideoData}) => {
     axios
     .put(`${APIROUTES.postVideo}${editVideoData.id}`, videoFormData, {headers})
     .then(res=>{
-      console.log(res.data, `guncellendi`)
       setInfo('Video başarıyla eklendi');
     })
     .catch(err=>{
       console.log(err.message, "gncellenemedi")
+      setInfo('Bir hata oluştu')
     })
     : (axios
       .post(APIROUTES.postVideo, videoFormData, {headers})
       .then((res) => {
         setInfo('Video başarıyla eklendi');
-        setVideos([...videos, res.data])
+        videoFormData.is_active && setVideos([...videos, res.data])
         console.log(res.data, "VIDEO")
+        console.log("senin gönderdğin", videoFormData)
       })
       .catch((err) => {
         console.log(err.message);
@@ -96,10 +98,11 @@ export const VideoForm = ({editVideoData}) => {
             dropdownTextStyles={{color: 'black'}}
             inputStyles={{color: 'black'}}
             save="value"
+            value={selected}
             placeholder="Select status"
           />
         </View>
-      <TouchableOpacity onPress={handleVideoSubmit} style={styles.button}>
+      <TouchableOpacity onPress={handleVideoSubmit} style={[styles.button, isLoading &&  {backgroundColor: '#8fa3b8'}]} disabled={isLoading}>
         <Text style={styles.buttonText}>Kaydet</Text>
       </TouchableOpacity>
       {info && info.length > 0 && <Text style={{fontSize: 18, textAlign: 'center', margin: 10, color: 'black'}}>{info}</Text>}

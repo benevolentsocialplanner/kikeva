@@ -160,10 +160,10 @@ export const VideoDetailScreen = ({route}) => {
               scalesPageToFit={false}
               scrollEnabled={false}
               domStorageEnabled={true}
-              source={{uri: 'https://drive.google.com/file/d/1aWU8LLUMpK98Mx1g7wlD7U0fxNPwgzST/view'}}
+              source={{uri: video.url}}
             />}
         </TouchableWithoutFeedback>
-        {isFormOpen && <VideoForm editVideoData={video}>form</VideoForm>}
+        {isFormOpen && <View style={{height: 350, backgroundColor: 'white', paddingTop: 10, marginTop: -60}}><VideoForm editVideoData={video}>form</VideoForm></View>}
         <Text style={[styles.desc, {marginTop: -70, backgroundColor: 'white', height: 70}]}>{video?.description}</Text>
         {!isRated ? <View style={styles.questionsWrapper}>
           <Text style={{color: 'black', fontSize: 20, marginBottom: 25, marginTop: -15, zIndex: 999}}>Videoda dikkatinizi çeken iklim krizi özellikleri nelerdir? (Birden fazla seçenek işaretlenebilir)</Text>
@@ -234,6 +234,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginHorizontal: 20,
     alignSelf: 'center',
+    paddingBottom: 50
   },
   button: {
     display: 'flex',

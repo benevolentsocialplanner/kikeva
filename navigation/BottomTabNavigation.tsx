@@ -38,7 +38,7 @@ const BottomTabNavigation = ({navigation}) => {
   
   return (
     <>
-      <Tab.Navigator screenOptions={screenOptions}>
+      <Tab.Navigator screenOptions={screenOptions} initialRouteName='Proje Bilgisi'>
         <Tab.Screen
           name="Videolar"
           component={VideoScreen}

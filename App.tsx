@@ -35,9 +35,8 @@ function App() {
   React.useEffect(() => {
     const loadUser = async () => {
       try {
-        await Storage.setItem('user', user);
+        user && await Storage.setItem('user', user);
         console.log(user, 'user');
-        console.log(await Storage.getItem('user'), 'user from storage');
       } catch (error) {
         console.error("Error loading user from storage", error);
       }
@@ -48,7 +47,7 @@ function App() {
   React.useEffect(() => {
     const loadTokenType = async () => {
       try {
-        await Storage.setItem("tokenType", tokenType);
+        tokenType && await Storage.setItem("tokenType", tokenType);
 
       } catch (error) {
         console.error("Error loading tokenType from storage", error);
@@ -60,7 +59,7 @@ function App() {
   React.useEffect(() => {
     const loadIsAdmin = async () => {
       try {
-        await Storage.setItem("isAdmin", isAdmin);
+        isAdmin && await Storage.setItem("isAdmin", isAdmin);
       } catch (error) {
         console.log("Error loading the permissions", error.message)
       }
@@ -113,9 +112,9 @@ function App() {
         <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen 
-              options={{headerShown: false}}
-           name={'BottomTabNavigation'}
-           component={BottomTabNavigation}
+            options={{headerShown: false}}
+            name={'BottomTabNavigation'}
+            component={BottomTabNavigation}
             />
           <Stack.Screen
             options={{headerShown: false}}
