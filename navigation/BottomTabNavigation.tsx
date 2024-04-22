@@ -5,6 +5,7 @@ import {VideoScreen} from '../screens/VideoScreen';
 import {AppContext} from '../App';
 import {AdminScreen} from '../screens/AdminScreen';
 import {InfoScreen} from '../screens/InfoScreen';
+import { PDFScreen } from '../screens/PDFScreen';
 
 const Tab = createBottomTabNavigator();
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
@@ -62,6 +63,20 @@ const BottomTabNavigation = ({navigation}) => {
                 <Image
                   style={styles.imageDiscover}
                   source={focused ? require('../assets/infoFocused.png') : require('../assets/info.png')}
+                />
+              );
+            },
+          }}
+        />
+        <Tab.Screen
+          name="PDF"
+          component={PDFScreen}
+          options={{
+            tabBarIcon: ({focused}) => {
+              return (
+                <Image
+                  style={styles.imageDiscover}
+                  source={focused ? require('../assets/docsFocus.png') : require('../assets/docs.png')}
                 />
               );
             },
