@@ -170,6 +170,9 @@ export const AdminScreen = () => {
                   </TouchableOpacity>
             </View>
           ))}
+          <View style={{height: 100}}>
+
+          </View>
       </ScrollView>
     </SafeAreaView>
   );

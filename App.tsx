@@ -8,7 +8,7 @@ import BottomTabNavigation from './navigation/BottomTabNavigation';
 import UserDetailScreen from './screens/UserDetailScreen';
 import AnswersScreen from './screens/AnswersScreen';
 import axios from 'axios';
-import { APIROUTES } from './constants/apiRoutes';
+import {APIROUTES} from './constants/apiRoutes'; 
 
 const Stack = createNativeStackNavigator();
 
@@ -16,8 +16,8 @@ const Stack = createNativeStackNavigator();
 export const AppContext = React.createContext({
   user: undefined,
   setUser: (obj: string | undefined) => obj,
-  isAdmin: false,
-  setIsAdmin: (obj: boolean) => obj,
+  isAdmin: undefined,
+  setIsAdmin: (obj: boolean | undefined) => obj,
   tokenType: undefined,
   setTokenType: (obj: string | undefined) => obj,
   videos: [],
@@ -65,18 +65,21 @@ function App() {
       }
     }
     loadIsAdmin();
-  }, [isAdmin])
+  }, [isAdmin]);
+  React.useEffect(() => {
+    console.log(videos)
+  },[videos])
 
   React.useEffect(() => {
     const loadCredentials = async () => {
       try {
+        // oturumu açık tut
         const checkAdmin = await Storage.getItem("isAdmin")
         const checkType = await Storage.getItem("tokenType")
         const checkUser = await Storage.getItem("user")
         checkAdmin && setIsAdmin(checkAdmin)
         checkType && setTokenType(checkType)
         checkUser && setUser(checkUser)
-        console.log(checkAdmin, checkType, checkUser, "check")
       } catch (error) {
         console.log(error?.mesage, "error mounting")
       }

@@ -2,6 +2,7 @@
 export const APIROUTES = {
   login: 'https://kikeva-ad338d93349c.herokuapp.com/login',
   getVideos: 'https://kikeva-ad338d93349c.herokuapp.com/videos/active',
+  getVideosAdmin: 'https://kikeva-ad338d93349c.herokuapp.com/videos/',
   getUsers: 'https://kikeva-ad338d93349c.herokuapp.com/users/',
   postVideo: 'https://kikeva-ad338d93349c.herokuapp.com/videos/',
   getRatingByUser: 'https://kikeva-ad338d93349c.herokuapp.com/ratings/user/user_id',

@@ -13,6 +13,7 @@ import {
 import {APIROUTES} from '../constants/apiRoutes';
 import {useNavigation} from '@react-navigation/native';
 import {AppContext} from '../App';
+import { Storage } from '../utils/storage';
 
 type Video = {
   description: string;
@@ -26,14 +27,19 @@ export const VideoScreen = () => {
   const {videos, setVideos} = React.useContext(AppContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const {tokenType, user, setUser, isAdmin, setIsAdmin, setTokenType} = React.useContext(AppContext);
+  const {tokenType, user, setUser, isAdmin, setIsAdmin, setTokenType, setUsers} = React.useContext(AppContext);
 
   const navigation = useNavigation();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setUser(undefined);
     setIsAdmin(false);
     setTokenType(undefined);
+    await Storage.setItem('user', undefined);
+    await Storage.setItem('tokenType', undefined);
+    await Storage.setItem('isAdmin', false);
+    setVideos([]);
+    setUsers([]);
   };
 
   const headers = {
@@ -44,9 +50,19 @@ export const VideoScreen = () => {
     setIsLoading(true);
 
     const fetch = () => {
-      
-
-      axios
+      if(isAdmin) {
+        axios
+        .get(APIROUTES.getVideosAdmin, { headers })
+        .then((res) => {
+          setVideos(res.data)
+          console.log(res.data, "videos fetched")
+        })
+        .catch((err) => {
+          console.log('Error getting videos', err.message)
+          setVideos([])
+        })
+      } else {
+        axios
         .get(APIROUTES.getVideos, { headers })
         .then((res) => {
           setVideos(res.data)
@@ -54,13 +70,11 @@ export const VideoScreen = () => {
         })
         .catch((err) => {
           console.log('Error getting videos', err.message)
-          setVideos([
-            { id: 1, title: 'Video 1', url: 'https://www.youtube.com/watch?v=gvkqT_Uoahw' },
-            { id: 2, title: 'Video 2', url: 'https://www.youtube.com/watch?v=gvkqT_Uoahw' },
-            { id: 3, title: 'Video 3', url: 'https://www.youtube.com/watch?v=gvkqT_Uoahw' },
-            { id: 4, title: 'Video 4', url: 'https://www.youtube.com/watch?v=gvkqT_Uoahw' },
-          ])
+          setVideos([])
         })
+      }
+
+      
     }
 
     fetch();

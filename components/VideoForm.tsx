@@ -11,20 +11,23 @@ import {APIROUTES} from '../constants/apiRoutes';
 import {AppContext} from '../App';
 import axios from 'axios';
 import {SelectList} from 'react-native-dropdown-select-list';
+import {useNavigation} from '@react-navigation/native';
 
 export const VideoForm = ({editVideoData}) => {
-  const [selected, setSelected] = React.useState(false);
-
+  const [selected, setSelected] = React.useState(editVideoData ? editVideoData?.is_active : false);
+  console.log("edit", editVideoData)
   const [videoFormData, setVideoFormData] = React.useState(editVideoData ? editVideoData : {
     url: '',
     title: '',
     description: '',
     is_active: selected,
   });
+
   const [isLoading, setIsLoading] = React.useState(false);
   const [info, setInfo] = React.useState('');
 
-  const {user, videos, setVideos} = React.useContext(AppContext);
+  const navigation = useNavigation();
+  const {user, videos, setVideos, isAdmin} = React.useContext(AppContext);
 
   const status = [
     {key: 1, value: "true"},
@@ -38,33 +41,50 @@ export const VideoForm = ({editVideoData}) => {
   const handleVideoSubmit = () => {
     setIsLoading(true);
     setInfo('');
-    editVideoData ? 
-    axios
-    .put(`${APIROUTES.postVideo}${editVideoData.id}`, videoFormData, {headers})
-    .then(res=>{
-      setInfo('Video başarıyla eklendi');
-    })
-    .catch(err=>{
-      console.log(err.message, "gncellenemedi")
-      setInfo('Bir hata oluştu')
-    })
-    : (axios
-      .post(APIROUTES.postVideo, videoFormData, {headers})
-      .then((res) => {
-        setInfo('Video başarıyla eklendi');
-        videoFormData.is_active && setVideos([...videos, res.data])
-        console.log(res.data, "VIDEO")
-        console.log("senin gönderdğin", videoFormData)
-      })
-      .catch((err) => {
-        console.log(err.message);
-        setInfo('Video eklenirken bir hata oluştu');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      }))
+    console.log(videoFormData, "videoFormData")
+    videoFormData.is_active = selected;
+    if (editVideoData) {
+      axios
+        .put(`${APIROUTES.postVideo}${editVideoData.id}`, videoFormData, { headers })
+        .then((res) => {
+          setVideos((prevVideos) =>
+            prevVideos.map((video) =>
+              video.id === editVideoData.id ? videoFormData : video
+            )
+          );
+          setInfo('Video başarıyla güncellendi');
+          navigation.navigate('Videolar');
+        })
+        .catch((err) => {
+          console.log(err.message, "güncellenemedi");
+          setInfo('Bir hata oluştu');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      axios
+        .post(APIROUTES.postVideo, videoFormData, { headers })
+        .then((res) => {
+          setInfo('Video başarıyla eklendi');
+          if (videoFormData.is_active || isAdmin) {
+            setVideos([...videos, res.data]);
+          }
+          console.log(res.data, "VIDEO");
+          console.log("senin gönderdiğin", videoFormData);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          setInfo('Video eklenirken bir hata oluştu');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+    
   };
 
+  React.useEffect(()=> {console.log(selected)}, [selected])
 
   return (
     <ScrollView>
@@ -98,7 +118,7 @@ export const VideoForm = ({editVideoData}) => {
             dropdownTextStyles={{color: 'black'}}
             inputStyles={{color: 'black'}}
             save="value"
-            value={selected}
+            value={selected }
             placeholder="Select status"
           />
         </View>
